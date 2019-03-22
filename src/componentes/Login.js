@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import { createBrowserHistory } from 'history'
 
 export default class Login extends Component {
     constructor() {
         super();
         this.state = { msg: '' }
+
     }
 
     envia(e) {
@@ -28,6 +28,7 @@ export default class Login extends Component {
                 }
             })
             .then(token => {
+                localStorage.setItem('auth-token', token);
                 //Redirecionar para outra rota.
                 this.props.history.push('/timeline');
             })

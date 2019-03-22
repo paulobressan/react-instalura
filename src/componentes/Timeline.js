@@ -5,6 +5,8 @@ export default class Timeline extends Component {
     constructor() {
         super();
         this.state = { fotos: [] }
+        
+        
     }
 
     componentDidMount() {
