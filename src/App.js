@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Header from './componentes/Header';
 import Timeline from './componentes/Timeline';
+import { withRouter } from 'react-router-dom';
 
 class App extends Component {
   render() {
@@ -15,4 +16,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default withRouter(App);

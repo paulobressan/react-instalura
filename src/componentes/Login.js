@@ -1,10 +1,20 @@
 import React, { Component } from 'react';
+//Manipular url querys
+import queryString from 'querystring';
+import { withRouter } from 'react-router-dom';
 
-export default class Login extends Component {
+class Login extends Component {
     constructor() {
         super();
         this.state = { msg: '' }
+    }
 
+    componentDidMount() {
+        console.log(this.props);
+        
+        let params = queryString.parse(this.props.location.search);
+        if (params['?msg'])
+            this.setState({ msg: params['?msg'] });
     }
 
     envia(e) {
@@ -51,3 +61,7 @@ export default class Login extends Component {
         );
     }
 }
+
+//Utilizamos o withRouter para que quando for roteado seja populado as props
+// Exemplo do efeito, chamando a rota /login-teste
+export default withRouter(Login);
