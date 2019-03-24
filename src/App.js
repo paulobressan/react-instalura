@@ -9,7 +9,8 @@ class App extends Component {
       <div id="root">
         <div className="main">
           <Header />
-          <Timeline />
+          {/* Os parametros coringa passado em uma rota, esta disponivel para acesso atraves das props, match, params */}
+          <Timeline login={this.props.match.params.login} />
         </div>
       </div>
     );

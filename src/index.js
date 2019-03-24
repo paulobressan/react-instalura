@@ -16,7 +16,9 @@ ReactDOM.render(
             <Route exact path="/" component={Login} />
 
             {/* Rotas seguras com acesso somente se passar na regra de segurança */}
-            <PrivateRouter path="/timeline" component={App} />
+            {/* Rota com parametro opcional coringa(/:login?) */}
+            <PrivateRouter path="/timeline/:login?" component={App} />
+            {/* <Route path="/timeline/:login" component={App} /> */}
 
             {/* Exemplo de como usar a função render do react com trativas de renderização ou redirecionamento */}
             <Route path="/login-teste" render={props => {

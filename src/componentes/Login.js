@@ -8,10 +8,11 @@ class Login extends Component {
         super();
         this.state = { msg: '' }
     }
-
+    
     componentDidMount() {
-        console.log(this.props);
-        
+        //Capturar uma query string passado pela url.
+        //As query string da url fica disponivel na props location.search
+        //Para mapear, vamos usar o pacote querystring e a função parse
         let params = queryString.parse(this.props.location.search);
         if (params['?msg'])
             this.setState({ msg: params['?msg'] });
