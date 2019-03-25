@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import FotoItem from './Foto';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+import TimelineApi from '../logicas/TimelineApi';
 
 export default class Timeline extends Component {
     constructor(props) {
@@ -28,8 +29,10 @@ export default class Timeline extends Component {
     }
 
     componentWillMount() {
-        this.props.timelineStore.subscribe(fotos => {
-            this.setState({ fotos });
+        //A store do redux contem um metodo subscribe que vamos ficar "escutando" as ações da store.
+        this.props.store.subscribe(() => {
+            //Para capturar os dados da store, temos que chamar o getState que chama sempre o ultimo state retornado pela store.
+            this.setState({ fotos: this.props.store.getState() });
         });
     }
 
@@ -38,16 +41,19 @@ export default class Timeline extends Component {
             ? `https://instalura-api.herokuapp.com/api/public/fotos/${this.login}`
             : `https://instalura-api.herokuapp.com/api/fotos?X-AUTH-TOKEN=${localStorage.getItem('auth-token')}`;
 
-        this.props.timelineStore.lista(urlPerfil);
+        TimelineApi.lista(urlPerfil, this.props.store);
+        // Como o carregamento é assincrono,
+        // podemos adicionar ao dispatch a ação e o Redux gerenciar quando ela vai ser executada.
+        this.props.store.dispatch(TimelineApi.lista(urlPerfil));
     }
 
     //Concentrar toda a logica de nogocio da aplicação na timeline
     like(fotoId) {
-        this.props.timelineStore.like(fotoId);
+        this.props.store.like(fotoId);
     }
 
     comenta(fotoId, comentario) {
-        this.props.timelineStore.comenta(fotoId, comentario);
+        this.props.store.comenta(fotoId, comentario);
     }
 
     render() {

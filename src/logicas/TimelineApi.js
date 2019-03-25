@@ -1,6 +1,6 @@
 import PubSub from 'pubsub-js';
 
-export default class TimelineStore {
+export default class TimelineApi {
     constructor(fotos) {
         this.fotos = fotos;
     }
@@ -11,13 +11,15 @@ export default class TimelineStore {
         });
     }
 
-    lista(urlPerfil) {
-        fetch(urlPerfil)
-            .then(response => response.json())
-            .then(fotos => {
-                PubSub.publish('timeline', { fotos });
-                this.fotos = fotos;
-            });
+    static lista(urlPerfil) {
+        // O REDUX THUNK necessita o retorno de um função.
+        return dispatch => {
+            fetch(urlPerfil)
+                .then(response => response.json())
+                .then(fotos => {
+                    dispatch({ type: 'LISTAGEM', fotos })
+                });
+        }
     }
 
     like(fotoId) {
