@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import FotoItem from './Foto';
-import PubSub from 'pubsub-js';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
 export default class Timeline extends Component {
@@ -29,35 +28,8 @@ export default class Timeline extends Component {
     }
 
     componentWillMount() {
-        PubSub.subscribe('timeline', (topico, infoFotos) => {
-            if (infoFotos.fotos.length > 0)
-                this.setState({ fotos: infoFotos.fotos });
-        });
-
-        // MANTENDO REGRA DE NEGOCIO DOS COMPONENTES DE FOTO NA TIMELINE
-        PubSub.subscribe('atualiza-liker', (topico, infoLiker) => {
-            const fotoAchada = this.state.fotos.find(foto => foto.id === infoLiker.fotoId)
-
-            const possivelLiker = fotoAchada.likers.find(liker => liker.login === infoLiker.liker.login);
-
-            fotoAchada.likeada = !fotoAchada.likeada;
-
-            if (!possivelLiker) {
-                //Alterar o likers de uma das fotos da timeline
-                fotoAchada.likers.push(infoLiker.liker);
-            } else {
-                const novosLikers = fotoAchada.likers.filter(liker => liker.login !== infoLiker.liker.login);
-                fotoAchada.likers = novosLikers;
-            }
-            // Alterar o estado das fotos porque uma das fotos esta alterada
-            this.setState({ fotos: this.state.fotos });
-        });
-
-        PubSub.subscribe('novos-comentarios', (topico, infoComentario) => {
-            const fotoAchada = this.state.fotos.find(foto => foto.id === infoComentario.fotoId)
-            fotoAchada.comentarios.push(infoComentario.novoComentario)
-            // Alterar o estado das fotos porque uma das fotos esta alterada
-            this.setState({ fotos: this.state.fotos });
+        this.props.timelineStore.subscribe(fotos => {
+            this.setState({ fotos });
         });
     }
 
@@ -66,54 +38,16 @@ export default class Timeline extends Component {
             ? `https://instalura-api.herokuapp.com/api/public/fotos/${this.login}`
             : `https://instalura-api.herokuapp.com/api/fotos?X-AUTH-TOKEN=${localStorage.getItem('auth-token')}`;
 
-        fetch(urlPerfil)
-            .then(response => response.json())
-            .then(fotos => this.setState({ fotos }));
+        this.props.timelineStore.lista(urlPerfil);
     }
 
     //Concentrar toda a logica de nogocio da aplicação na timeline
     like(fotoId) {
-        const requestInfo = {
-            method: 'POST',
-            headers: new Headers({
-                'X-AUTH-TOKEN': localStorage.getItem('auth-token')
-            })
-        };
-
-        fetch(`https://instalura-api.herokuapp.com/api/fotos/${fotoId}/like`, requestInfo)
-            .then(resposta => {
-                if (resposta.ok) {
-                    return resposta.json()
-                } else {
-                    throw new Error('Não foi possivel realizar o liker na foto')
-                }
-            })
-            .then(liker => {
-                PubSub.publish('atualiza-liker', { fotoId, liker })
-            });
+        this.props.timelineStore.like(fotoId);
     }
 
     comenta(fotoId, comentario) {
-        const requestInfo = {
-            method: 'POST',
-            body: JSON.stringify({ texto: comentario }),
-            headers: new Headers({
-                'Content-type': 'application/json',
-                'X-AUTH-TOKEN': localStorage.getItem('auth-token')
-            })
-        };
-
-        fetch(`https://instalura-api.herokuapp.com/api/fotos/${fotoId}/comment`, requestInfo)
-            .then(resposta => {
-                if (resposta.ok) {
-                    return resposta.json();
-                } else {
-                    throw new Error("Não foi possivel comentar");
-                }
-            })
-            .then(novoComentario => {
-                PubSub.publish('novos-comentarios', { fotoId, novoComentario })
-            });
+        this.props.timelineStore.comenta(fotoId, comentario);
     }
 
     render() {
@@ -126,7 +60,7 @@ export default class Timeline extends Component {
                     transitionEnterTimeout={500}
                     transitionLeaveTimeout={300}>
                     {
-                        this.state.fotos.map(foto => <FotoItem key={foto.id} foto={foto} likeEvent={this.like} comentaEvent={this.comenta} />)
+                        this.state.fotos.map(foto => <FotoItem key={foto.id} foto={foto} likeEvent={this.like.bind(this)} comentaEvent={this.comenta.bind(this)} />)
                     }
 
                 </ReactCSSTransitionGroup>
