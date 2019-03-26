@@ -1,15 +1,22 @@
 import React, { Component } from 'react';
-import PubSub from 'pubsub-js';
+import TimelineApi from '../logicas/TimelineApi';
+import { notificar } from '../actions/actionCreator';
 
 export default class Header extends Component {
+    constructor() {
+        super();
+        this.state = { msg: '' }
+    }
 
+    componentDidMount() {
+        this.props.store.subscribe(() => {
+            this.setState({ msg: this.props.store.getState().notificacao })
+        });        
+    }
 
     pesquisa(e) {
         e.preventDefault();
-
-        fetch(`https://instalura-api.herokuapp.com/api/public/fotos/${this.loginPesquisado.value}`)
-            .then(resposta => resposta.json())
-            .then(fotos => PubSub.publish('timeline', { fotos }));
+        this.props.store.dispatch(TimelineApi.pesquisa(this.loginPesquisado.value));
     }
 
     render() {
@@ -23,6 +30,12 @@ export default class Header extends Component {
                     <input type="text" name="search" placeholder="Pesquisa" className="header-busca-campo" ref={input => this.loginPesquisado = input} />
                     <input type="submit" value="Buscar" className="header-busca-submit" />
                 </form>
+
+                <span>
+                    {
+                        this.state.msg
+                    }
+                </span>
 
                 <nav>
                     <ul className="header-nav">

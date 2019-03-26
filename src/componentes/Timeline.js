@@ -32,7 +32,7 @@ export default class Timeline extends Component {
         //A store do redux contem um metodo subscribe que vamos ficar "escutando" as ações da store.
         this.props.store.subscribe(() => {
             //Para capturar os dados da store, temos que chamar o getState que chama sempre o ultimo state retornado pela store.
-            this.setState({ fotos: this.props.store.getState() });
+            this.setState({ fotos: this.props.store.getState().timeline });
         });
     }
 
