@@ -41,7 +41,7 @@ export default class Timeline extends Component {
             ? `https://instalura-api.herokuapp.com/api/public/fotos/${this.login}`
             : `https://instalura-api.herokuapp.com/api/fotos?X-AUTH-TOKEN=${localStorage.getItem('auth-token')}`;
 
-        TimelineApi.lista(urlPerfil, this.props.store);
+        // TimelineApi.lista(urlPerfil, this.props.store);
         // Como o carregamento é assincrono,
         // podemos adicionar ao dispatch a ação e o Redux gerenciar quando ela vai ser executada.
         this.props.store.dispatch(TimelineApi.lista(urlPerfil));
@@ -49,11 +49,11 @@ export default class Timeline extends Component {
 
     //Concentrar toda a logica de nogocio da aplicação na timeline
     like(fotoId) {
-        this.props.store.like(fotoId);
+        this.props.store.dispatch(TimelineApi.like(fotoId));
     }
 
     comenta(fotoId, comentario) {
-        this.props.store.comenta(fotoId, comentario);
+        this.props.store.dispatch(TimelineApi.comenta(fotoId, comentario));
     }
 
     render() {
