@@ -1,18 +1,19 @@
 import React, { Component } from 'react';
 import TimelineApi from '../logicas/TimelineApi';
-import { notificar } from '../actions/actionCreator';
+// import { notificar } from '../actions/actionCreator';
 
 export default class Header extends Component {
-    constructor() {
-        super();
-        this.state = { msg: '' }
+    constructor(props) {
+        super(props);
+        this.state = { msg: this.props.notificacao }
     }
 
-    componentDidMount() {
-        this.props.store.subscribe(() => {
-            this.setState({ msg: this.props.store.getState().notificacao })
-        });        
-    }
+    // componentDidMount() {
+    //     this.
+    //     this.props.store.subscribe(() => {
+    //         this.setState({ msg: this.props.store.getState().notificacao })
+    //     });        
+    // }
 
     pesquisa(e) {
         e.preventDefault();

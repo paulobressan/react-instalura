@@ -16,16 +16,20 @@ function trocaFoto(lista, fotoId, callback) {
     return lista.set(indiceDaLista, fotoEstadoNovo)
 }
 
+const INITIAL_STATE = {
+    fotos: new List()
+}
+
 //O redux tem a ideia de dados imutaveis. Toda store recebe uma função(callback) que recebe como parametro state e action.
 //REDUCER, função "redutora". Vai entrar um estado de um jeito e ela vai devolver de "outro"
 // - state é o ultimo estado da timeline
 // - action é o novos dados que vão ser atualizado no estado
 // Uma boa pratica é que sempre que executar a função e cair em um if action, vamos retornar um novo state para tornar sempre o ultimo imultavel.
-export function timeline(state = new List(), action) {
+export function timeline(state = INITIAL_STATE, action) {
     if (action.type === 'LISTAGEM') {
         //Quando alguem chamar a ação listagem, vamos retornar uma nova lista
         //Utilizando o List de immutable para sempre retornar uma nova lista
-        return new List(action.fotos);
+        return INITIAL_STATE.fotos = new List(action.fotos);
     }
 
     if (action.type === 'COMENTARIO') {

@@ -2,11 +2,14 @@ import React, { Component } from 'react';
 import FotoItem from './Foto';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import TimelineApi from '../logicas/TimelineApi';
+import { connect } from 'react-redux';
 
-export default class Timeline extends Component {
+class Timeline extends Component {
     constructor(props) {
         super(props);
-        this.state = { fotos: [] }
+        console.log(props);
+
+        this.state = { fotos: this.props.timeline }
         this.login = this.props.login;
     }
 
@@ -19,7 +22,7 @@ export default class Timeline extends Component {
     componentWillReceiveProps(nextProps) {
         //vamos verificar se as novas props passada tem a prop login e se ela esta preechida
         if (nextProps.login !== undefined) {
-            this.login = nextProps.login;
+            this.login = nekxtProps.login;
             this.carregaFotos();
         }
     }
@@ -30,10 +33,10 @@ export default class Timeline extends Component {
 
     componentWillMount() {
         //A store do redux contem um metodo subscribe que vamos ficar "escutando" as ações da store.
-        this.props.store.subscribe(() => {
-            //Para capturar os dados da store, temos que chamar o getState que chama sempre o ultimo state retornado pela store.
-            this.setState({ fotos: this.props.store.getState().timeline });
-        });
+        //this.props.store.subscribe(() => {
+        //Para capturar os dados da store, temos que chamar o getState que chama sempre o ultimo state retornado pela store.
+        this.setState({ fotos: this.props.fotos });
+        //});
     }
 
     carregaFotos() {
@@ -44,16 +47,16 @@ export default class Timeline extends Component {
         // TimelineApi.lista(urlPerfil, this.props.store);
         // Como o carregamento é assincrono,
         // podemos adicionar ao dispatch a ação e o Redux gerenciar quando ela vai ser executada.
-        this.props.store.dispatch(TimelineApi.lista(urlPerfil));
+        this.props.dispatch(TimelineApi.lista(urlPerfil));
     }
 
     //Concentrar toda a logica de nogocio da aplicação na timeline
     like(fotoId) {
-        this.props.store.dispatch(TimelineApi.like(fotoId));
+        this.props.dispatch(TimelineApi.like(fotoId));
     }
 
     comenta(fotoId, comentario) {
-        this.props.store.dispatch(TimelineApi.comenta(fotoId, comentario));
+        this.props.dispatch(TimelineApi.comenta(fotoId, comentario));
     }
 
     render() {
@@ -74,3 +77,10 @@ export default class Timeline extends Component {
         );
     }
 }
+
+const mapStateToProps = state => ({
+    fotos: state.timeline.fotos
+})
+
+
+export default connect(mapStateToProps)(Timeline);

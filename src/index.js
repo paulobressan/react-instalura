@@ -1,42 +1,39 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import * as serviceWorker from './serviceWorker';
+
 import './css/reset.css';
 import './css/timeline.css';
 import './css/login.css';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
-import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
-import Login from './componentes/Login';
-import PrivateRouter from './core/components/PrivateRouter';
-import NotFound from './core/components/NotFound';
+import AppRoutes from './router';
+
+//INTEGRAÇÃO REACT-REDUX
+import { Provider } from 'react-redux';
+
+//START REDUX
+//Criando uma store no redux
+import { createStore, applyMiddleware, combineReducers } from 'redux';
+import thunkMiddleware from 'redux-thunk';
+//reducers
+import { timeline } from './reducers/timeline';
+import { notificacao } from './reducers/header';
+
+//Combinar os reducers para que uma store tenha mais de um reducer
+const reducers = combineReducers({
+    timeline,
+    notificacao
+});
+
+// O redux vai ficar entre o redux e o react e vai facilitar o gerenciamento de estados.
+const store = createStore(reducers, applyMiddleware(thunkMiddleware));
+
+//END REDUX
 
 ReactDOM.render(
-    <BrowserRouter>
-        <Switch>
-            <Route exact path="/" component={Login} />
-
-            {/* Rotas seguras com acesso somente se passar na regra de segurança */}
-            {/* Rota com parametro opcional coringa(/:login?) */}
-            <PrivateRouter path="/timeline/:login?" component={App} />
-            {/* <Route path="/timeline/:login" component={App} /> */}
-
-            {/* Exemplo de como usar a função render do react com trativas de renderização ou redirecionamento */}
-            <Route path="/login-teste" render={props => {
-                return false ? <Login /> : <Redirect to="/teste" />
-            }} />
-
-            {/* Exemplo de como funciona o metodo render dentro de um Route */}
-            <Route path='/teste' render={(props) => {
-                console.log(props);
-                return (
-                    <h1>Olas</h1>
-                );
-            }} />
-
-            {/* Rota para representar uma pagina NotFound */}
-            <Route path="*" component={NotFound} />
-        </Switch>
-    </BrowserRouter>
+    //O Provider vai disponibilizar a store em todos os componentes
+    <Provider store={store}>
+        <AppRoutes />
+    </Provider>
     , document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change

@@ -2,13 +2,14 @@ import React, { Component } from 'react';
 //Manipular url querys
 import queryString from 'querystring';
 import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
 
 class Login extends Component {
     constructor() {
         super();
         this.state = { msg: '' }
     }
-    
+
     componentDidMount() {
         //Capturar uma query string passado pela url.
         //As query string da url fica disponivel na props location.search
@@ -65,4 +66,6 @@ class Login extends Component {
 
 //Utilizamos o withRouter para que quando for roteado seja populado as props
 // Exemplo do efeito, chamando a rota /login-teste
-export default withRouter(Login);
+//export default withRouter(Login);
+
+export default connect(state => state)(Login);
