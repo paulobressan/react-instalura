@@ -69,6 +69,9 @@ class Timeline extends Component {
     }
 }
 
+// O mapStateToProps sempre vai ser executado quando um reducer ser alterado
+// E no componente adicionaramos um ciclo de vida para setar o estado de fotos
+// Quando o mapStateToProps injetar as props novas.
 const mapStateToProps = (state, ownProps) => {
     //ownProps : Props passada por parametros.
     return ({
