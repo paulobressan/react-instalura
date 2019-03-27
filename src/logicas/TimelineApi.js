@@ -9,6 +9,11 @@ export default class TimelineApi {
             fetch(urlPerfil)
                 .then(response => response.json())
                 .then(fotos => {
+                    if (fotos.length === 0) {
+                        dispatch(notificar('Usuário não encontrado'));
+                    } else {
+                        dispatch(notificar('Usuário encontrado'));
+                    }
                     dispatch(listagem(fotos));
                     //Vamos retornar as fotos para que quem não estiver usando o redux e quiser usar a função lista, vai poder usar normalmente.
                     return fotos;

@@ -8,6 +8,7 @@ class Timeline extends Component {
     constructor(props) {
         super(props);
         this.state = { fotos: this.props.fotos }
+        this.login = this.props.login
     }
 
     //Quando utilizamos o componentDidMount, temos problema se queremos renderizar 

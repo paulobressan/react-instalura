@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 //Manipular url querys
 import queryString from 'querystring';
-import { withRouter } from 'react-router-dom';
-import { connect } from 'react-redux';
 
 class Login extends Component {
     constructor() {
