@@ -2,9 +2,10 @@ import React, { Component } from 'react';
 import Header from './componentes/Header';
 import Timeline from './componentes/Timeline';
 //Utilizado para validar tipos e se existe objeto store ou outros na App ou outras componentes. 
-import PropTypes from 'prop-types';
+//import PropTypes from 'prop-types';
 
 class App extends Component {
+
   render() {
     return (
       <div id="root">
@@ -18,10 +19,10 @@ class App extends Component {
   }
 }
 
-// Validar tudo o que esperamos no contexto global do react para que a App seja criada.
-App.contextType = {
-  //A App necessita ter a prop store no contexto global para ser criada
-  store: PropTypes.object.isRequired
-}
+// //Validar tudo o que esperamos no contexto global do react para que a App seja criada.
+// App.contextTypes = {
+//   //A App necessita ter a prop store no contexto global para ser criada
+//   store: PropTypes.object.isRequired
+// }
 
 export default App;

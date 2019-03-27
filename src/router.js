@@ -18,7 +18,7 @@ export default () => {
 
                 {/* Exemplo de como usar a função render do react com trativas de renderização ou redirecionamento */}
                 <Route path="/login-teste" render={props => {
-                    return false ? <Login /> : <Redirect to="/teste" />
+                    return false ? <Login {...props} /> : <Redirect to="/teste" />
                 }} />
 
                 {/* Exemplo de como funciona o metodo render dentro de um Route */}

@@ -1,23 +1,20 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import TimelineApi from '../logicas/TimelineApi';
-// import { notificar } from '../actions/actionCreator';
 
-export default class Header extends Component {
+class Header extends Component {
     constructor(props) {
         super(props);
         this.state = { msg: this.props.notificacao }
     }
 
-    // componentDidMount() {
-    //     this.
-    //     this.props.store.subscribe(() => {
-    //         this.setState({ msg: this.props.store.getState().notificacao })
-    //     });        
-    // }
+    componentWillReceiveProps(nextProps) {
+        this.setState({ msg: nextProps.notificacao })
+    }
 
     pesquisa(e) {
         e.preventDefault();
-        this.props.store.dispatch(TimelineApi.pesquisa(this.loginPesquisado.value));
+        this.props.dispatch(TimelineApi.pesquisa(this.loginPesquisado.value));
     }
 
     render() {
@@ -51,3 +48,12 @@ export default class Header extends Component {
         );
     }
 }
+
+const mapStateToProps = (state, ownProps) => {
+    //ownProps : Props passada por parametros.
+    return ({
+        notificacao: state.notificacao
+    });
+}
+
+export default connect(mapStateToProps)(Header)

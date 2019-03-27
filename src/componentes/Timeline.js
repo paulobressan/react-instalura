@@ -7,10 +7,7 @@ import { connect } from 'react-redux';
 class Timeline extends Component {
     constructor(props) {
         super(props);
-        console.log(props);
-
-        this.state = { fotos: this.props.timeline }
-        this.login = this.props.login;
+        this.state = { fotos: this.props.fotos }
     }
 
     //Quando utilizamos o componentDidMount, temos problema se queremos renderizar 
@@ -20,23 +17,16 @@ class Timeline extends Component {
     //O parametro nextProps são as novas props passadas
     //O nextProps não é populado para as props do this(contexto)i
     componentWillReceiveProps(nextProps) {
+        this.setState({ fotos: nextProps.fotos })
         //vamos verificar se as novas props passada tem a prop login e se ela esta preechida
         if (nextProps.login !== undefined) {
-            this.login = nekxtProps.login;
+            this.login = nextProps.login;
             this.carregaFotos();
         }
     }
 
     componentDidMount() {
         this.carregaFotos();
-    }
-
-    componentWillMount() {
-        //A store do redux contem um metodo subscribe que vamos ficar "escutando" as ações da store.
-        //this.props.store.subscribe(() => {
-        //Para capturar os dados da store, temos que chamar o getState que chama sempre o ultimo state retornado pela store.
-        this.setState({ fotos: this.props.fotos });
-        //});
     }
 
     carregaFotos() {
@@ -69,7 +59,7 @@ class Timeline extends Component {
                     transitionEnterTimeout={500}
                     transitionLeaveTimeout={300}>
                     {
-                        this.state.fotos.map(foto => <FotoItem key={foto.id} foto={foto} likeEvent={this.like.bind(this)} comentaEvent={this.comenta.bind(this)} />)
+                       this.state.fotos.map(foto => <FotoItem key={foto.id} foto={foto} likeEvent={this.like.bind(this)} comentaEvent={this.comenta.bind(this)} />)
                     }
 
                 </ReactCSSTransitionGroup>
@@ -78,9 +68,12 @@ class Timeline extends Component {
     }
 }
 
-const mapStateToProps = state => ({
-    fotos: state.timeline.fotos
-})
-
+const mapStateToProps = (state, ownProps) => {
+    //ownProps : Props passada por parametros.
+    return ({
+        login: ownProps.login,
+        fotos: state.timeline
+    })
+}
 
 export default connect(mapStateToProps)(Timeline);

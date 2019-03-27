@@ -71,9 +71,9 @@ export default class TimelineApi {
             fetch(`https://instalura-api.herokuapp.com/api/public/fotos/${login}`)
                 .then(resposta => resposta.json())
                 .then(fotos => {
-                    if(fotos.length === 0){
+                    if (fotos.length === 0) {
                         dispatch(notificar('Usuário não encontrado'));
-                    }else{
+                    } else {
                         dispatch(notificar('Usuário encontrado'));
                     }
                     dispatch(listagem(fotos));

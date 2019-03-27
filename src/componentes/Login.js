@@ -68,4 +68,4 @@ class Login extends Component {
 // Exemplo do efeito, chamando a rota /login-teste
 //export default withRouter(Login);
 
-export default connect(state => state)(Login);
+export default Login;
