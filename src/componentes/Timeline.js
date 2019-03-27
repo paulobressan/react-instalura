@@ -7,24 +7,20 @@ import { connect } from 'react-redux';
 class Timeline extends Component {
     constructor(props) {
         super(props);
-        this.state = { fotos: this.props.fotos }
+        //this.state = { fotos: this.props.fotos }
         this.login = this.props.login
     }
 
     //Quando utilizamos o componentDidMount, temos problema se queremos renderizar 
     //novamente o componente, porque o ciclo de vida componentDidMount não vai ser executado novamente. 
-    //Para isso, existe o componentWillReceiveProps que sempre que passamos uma props e renderizamos o componente novamente,
-    //Esse ciclo de vida vai ser executado
     //O parametro nextProps são as novas props passadas
-    //O nextProps não é populado para as props do this(contexto)i
-    componentWillReceiveProps(nextProps) {
-        this.setState({ fotos: nextProps.fotos })
-        //vamos verificar se as novas props passada tem a prop login e se ela esta preechida
-        if (nextProps.login !== undefined) {
-            this.login = nextProps.login;
-            this.carregaFotos();
-        }
-    }
+    // componentWillReceiveProps(nextProps) {
+    //     //vamos verificar se as novas props passada tem a prop login e se ela esta preechida
+    //     if (nextProps.login !== undefined) {
+    //         this.login = nextProps.login;
+    //         this.carregaFotos();
+    //     }
+    // }
 
     componentDidMount() {
         this.carregaFotos();
@@ -60,7 +56,7 @@ class Timeline extends Component {
                     transitionEnterTimeout={500}
                     transitionLeaveTimeout={300}>
                     {
-                       this.state.fotos.map(foto => <FotoItem key={foto.id} foto={foto} likeEvent={this.like.bind(this)} comentaEvent={this.comenta.bind(this)} />)
+                        this.props.fotos.map(foto => <FotoItem key={foto.id} foto={foto} likeEvent={this.like.bind(this)} comentaEvent={this.comenta.bind(this)} />)
                     }
 
                 </ReactCSSTransitionGroup>
@@ -73,6 +69,8 @@ class Timeline extends Component {
 // E no componente adicionaramos um ciclo de vida para setar o estado de fotos
 // Quando o mapStateToProps injetar as props novas.
 const mapStateToProps = (state, ownProps) => {
+    //console.log(ownProps);
+
     //ownProps : Props passada por parametros.
     return ({
         login: ownProps.login,

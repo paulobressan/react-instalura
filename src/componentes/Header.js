@@ -8,10 +8,6 @@ class Header extends Component {
         this.state = { msg: this.props.notificacao }
     }
 
-    componentWillReceiveProps(nextProps) {
-        this.setState({ msg: nextProps.notificacao })
-    }
-
     pesquisa(e) {
         e.preventDefault();
         this.props.dispatch(TimelineApi.pesquisa(this.loginPesquisado.value));
@@ -31,7 +27,7 @@ class Header extends Component {
 
                 <span>
                     {
-                        this.state.msg
+                        this.props.notificacao
                     }
                 </span>
 
